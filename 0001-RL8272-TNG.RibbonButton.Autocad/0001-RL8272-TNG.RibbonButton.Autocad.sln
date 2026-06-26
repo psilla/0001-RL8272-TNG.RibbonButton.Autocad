@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37012.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0001-RL8272-TNG.RibbonButton.Autocad", "0001-RL8272-TNG.RibbonButton.Autocad.csproj", "{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TYPSA.SharedLibAutocad", "..\..\0000-TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad.csproj", "{631B9318-A021-4B24-87F0-3FEC637EAE77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TYPSA.SharedLibForms", "..\..\0000-TYPSA.SharedLibForms\TYPSA.SharedLibForms\TYPSA.SharedLibForms.csproj", "{8F836313-B339-4DB6-8A55-AF61386871B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TYPSA.SharedLibExcel", "..\..\0000-TYPSA.SharedLibExcel\TYPSA.SharedLibExcel\TYPSA.SharedLibExcel.csproj", "{FF31B661-8CE6-420F-8720-F077B273E9C6}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RL8272-TNG.RibbonButton.Autocad", "..\RL8272-TNG.RibbonButton.Autocad\RL8272-TNG.RibbonButton.Autocad.vdproj", "{ECB385B0-4754-EBD4-BA7C-82159F73DD4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631B9318-A021-4B24-87F0-3FEC637EAE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631B9318-A021-4B24-87F0-3FEC637EAE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631B9318-A021-4B24-87F0-3FEC637EAE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631B9318-A021-4B24-87F0-3FEC637EAE77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F836313-B339-4DB6-8A55-AF61386871B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F836313-B339-4DB6-8A55-AF61386871B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F836313-B339-4DB6-8A55-AF61386871B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F836313-B339-4DB6-8A55-AF61386871B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF31B661-8CE6-420F-8720-F077B273E9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF31B661-8CE6-420F-8720-F077B273E9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF31B661-8CE6-420F-8720-F077B273E9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF31B661-8CE6-420F-8720-F077B273E9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECB385B0-4754-EBD4-BA7C-82159F73DD4A}.Debug|Any CPU.ActiveCfg = Debug
+		{ECB385B0-4754-EBD4-BA7C-82159F73DD4A}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64E3D2A8-0AA2-42D6-A556-4184FD87D075}
+	EndGlobalSection
+EndGlobal

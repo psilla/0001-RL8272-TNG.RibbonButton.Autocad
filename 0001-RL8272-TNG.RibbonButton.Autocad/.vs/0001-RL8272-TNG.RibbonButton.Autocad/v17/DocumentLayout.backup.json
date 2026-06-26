@@ -1,0 +1,148 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\01-main\\cls_00_ateneamodelchecker\\cls_00_maincheckacadversion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.ribbonbutton.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "cls_00_ButtonTngModelChecker.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "RelativeDocumentMoniker": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "RelativeToolTip": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-26T11:22:57.486Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "cls_00_MainTngModelChecker.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
+              "RelativeDocumentMoniker": "03-Main\\cls_00_MainTngModelChecker.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
+              "RelativeToolTip": "03-Main\\cls_00_MainTngModelChecker.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAArwIcBAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T14:33:37.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "cls_00_MainCheckAcadVersion.cs",
+              "DocumentMoniker": "C:\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckAcadVersion.cs",
+              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckAcadVersion.cs",
+              "ToolTip": "C:\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckAcadVersion.cs",
+              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckAcadVersion.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAIwJAAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-26T11:19:37.463Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
