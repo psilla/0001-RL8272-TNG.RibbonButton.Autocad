@@ -24,7 +24,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 out List<string> selectedFiles,
                 out string selectedFolderPath,
                 out DateTime startTime,
-                "Please, paste the folder containing the DWG files to analyze"
+                customPathLabel: "Please, paste the folder containing the DWG files to analyze"
             );
             // Validamos
             if (!userData) return;
@@ -62,8 +62,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
             List<string> selectedOptions = cls_00_InstaForm_CheckedListBox.CheckListBoxFormSearchOut(
                 title,
-                AteneaModelCheckerOptionsLocalized.GetAllOptions(isSpanish),
-                AteneaModelCheckerOptionsLocalized.GetDefaultSelectedOptions(isSpanish)
+                ModelCheckerKeys.GetAllOptions(isSpanish),
+                ModelCheckerKeys.GetDefaultSelectedOptions(isSpanish)
             );
             // Validamos
             if (selectedOptions == null || selectedOptions.Count == 0)

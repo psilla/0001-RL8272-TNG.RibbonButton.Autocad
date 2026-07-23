@@ -3,11 +3,10 @@
   "WorkspaceRootPath": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.ribbonbutton.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\01-main\\cls_00_ateneamodelchecker\\cls_00_mainchecklayersinuse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.ribbonbutton.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -54,26 +53,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "cls_00_ButtonTngModelChecker.cs",
-              "DocumentMoniker": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
-              "RelativeDocumentMoniker": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
-              "ToolTip": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
-              "RelativeToolTip": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T11:22:57.486Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "cls_00_MainTngModelChecker.cs",
               "DocumentMoniker": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
               "RelativeDocumentMoniker": "03-Main\\cls_00_MainTngModelChecker.cs",
               "ToolTip": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
               "RelativeToolTip": "03-Main\\cls_00_MainTngModelChecker.cs",
-              "ViewState": "AgIAAJ4AAAAAAAAAAAArwIcBAABcAAAAAAAAAA==",
+              "ViewState": "AgIAABEBAAAAAAAAAAAiwBcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-19T14:33:37.389Z",
               "EditorCaption": ""
@@ -123,6 +109,40 @@
             {
               "$type": "Bookmark",
               "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "842e01da-264b-4822-baa0-4e19b8eaa19b",
+        "Display": 1,
+        "X": 403,
+        "Y": 0,
+        "Width": 1324,
+        "Height": 1037,
+        "WindowState": 2
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "cls_00_MainCheckLayersInUse.cs",
+              "DocumentMoniker": "C:\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckLayersInUse.cs",
+              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckLayersInUse.cs",
+              "ToolTip": "C:\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckLayersInUse.cs",
+              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_MainCheckLayersInUse.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAgwDoAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-04T13:03:07.793Z",
+              "EditorCaption": ""
             }
           ]
         }

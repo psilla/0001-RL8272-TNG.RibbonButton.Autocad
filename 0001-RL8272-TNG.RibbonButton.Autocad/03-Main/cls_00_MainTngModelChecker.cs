@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -28,11 +28,33 @@ using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace TYPSA.PS.RibbonButton.Autocad
 {
-    public static class cls_00_ExportModelCheckerToHtml
+    public static class TngModelCheckerDefaults
     {
-        
-    }
+        // -----------------------------
+        // Fonts
+        // -----------------------------
 
+        public const string ExpectedPaperTextFont = "ISOCPEUR";
+
+        // -----------------------------
+        // Block Names
+        // -----------------------------
+
+        public const string PlotTagBlockName = "FUT_Ritningsram_";
+        public const string BlockAttributesName = "FUT_Namnruta_";
+
+        // -----------------------------
+        // Plot Tag Reference Texts
+        // -----------------------------
+
+        public const string PlotFileText = "Ritningsfil:";
+        public const string PlotDateText = "Plottdatum:";
+        public const string PlotUserText = "Plottad av:";
+
+        public static readonly List<string> PlotTagReferenceTexts =
+            new List<string> {PlotFileText, PlotDateText, PlotUserText};
+    }
+    
     public class WarningCheckLogResult
     {
         public string FileName { get; set; }
@@ -43,116 +65,101 @@ namespace TYPSA.PS.RibbonButton.Autocad
     public class cls_00_MainTngModelChecker
     {
         private static Dictionary<string, object> GetExportData(
-            bool isSpanish,
+            ModelCheckerKeys keys,
             List<string> selectedOptions,
-            ModelCheckerResults results
+            ModelCheckerResults resultsfromcad
         )
         {
             Dictionary<string, object> exportData = new Dictionary<string, object>();
 
             // -----------------------------
-            // Keys
-            // -----------------------------
-
-            string keyProjectUnits = AteneaModelCheckerOptionsLocalized.ProjectUnits(isSpanish);
-            string keyLayersInUse = AteneaModelCheckerOptionsLocalized.LayersInUse(isSpanish);
-            string keyLayerZero = AteneaModelCheckerOptionsLocalized.LayerZero(isSpanish);
-            string keyVersion = AteneaModelCheckerOptionsLocalized.Version(isSpanish);
-            string keyXrefs = AteneaModelCheckerOptionsLocalized.Xrefs(isSpanish);
-            string keyPaperTextFont = AteneaModelCheckerOptionsLocalized.PaperTextFont(isSpanish);
-            string keyEntByLayer = AteneaModelCheckerOptionsLocalized.ByLayerProperties(isSpanish);
-            string keyRevCloud = AteneaModelCheckerOptionsLocalized.RevisionClouds(isSpanish);
-            string keyAttrBlockRef = AteneaModelCheckerOptionsLocalized.BlockAttributes(isSpanish);
-            string keyPlotTag = AteneaModelCheckerOptionsLocalized.PlotTag(isSpanish);
-
-            // -----------------------------
             // Project Units
             // -----------------------------
 
-            if (selectedOptions.Contains(keyProjectUnits) && results.ProjectUnits.Any())
+            if (selectedOptions.Contains(keys.ProjectUnits) && resultsfromcad.ProjectUnits.Any())
             {
-                exportData.Add(keyProjectUnits, results.ProjectUnits);
+                exportData.Add(keys.ProjectUnits, resultsfromcad.ProjectUnits);
             }
 
             // -----------------------------
             // Version
             // -----------------------------
 
-            if (selectedOptions.Contains(keyVersion) && results.Version.Any())
+            if (selectedOptions.Contains(keys.Version) && resultsfromcad.Version.Any())
             {
-                exportData.Add(keyVersion, results.Version);
+                exportData.Add(keys.Version, resultsfromcad.Version);
             }
 
             // -----------------------------
             // Xrefs
             // -----------------------------
 
-            if (selectedOptions.Contains(keyXrefs) && results.Xrefs.Any())
+            if (selectedOptions.Contains(keys.Xrefs) && resultsfromcad.Xrefs.Any())
             {
-                exportData.Add(keyXrefs, results.Xrefs);
+                exportData.Add(keys.Xrefs, resultsfromcad.Xrefs);
             }
 
             // -----------------------------
             // Layer Zero
             // -----------------------------
 
-            if (selectedOptions.Contains(keyLayerZero) && results.LayerZero.Any())
+            if (selectedOptions.Contains(keys.LayerZero) && resultsfromcad.LayerZero.Any())
             {
-                exportData.Add(keyLayerZero, results.LayerZero);
+                exportData.Add(keys.LayerZero, resultsfromcad.LayerZero);
             }
 
             // -----------------------------
             // Layers In Use
             // -----------------------------
 
-            if (selectedOptions.Contains(keyLayersInUse) && results.LayersInUse.Any())
+            if (selectedOptions.Contains(keys.LayersInUse) && resultsfromcad.LayersInUse.Any())
             {
-                exportData.Add(keyLayersInUse, results.LayersInUse);
+                exportData.Add(keys.LayersInUse, resultsfromcad.LayersInUse);
             }
 
             // -----------------------------
             // Paper Text Font
             // -----------------------------
 
-            if (selectedOptions.Contains(keyPaperTextFont) && results.PaperTextFont.Any())
+            if (selectedOptions.Contains(keys.PaperTextFont) && resultsfromcad.PaperTextFont.Any())
             {
-                exportData.Add(keyPaperTextFont, results.PaperTextFont);
+                exportData.Add(keys.PaperTextFont, resultsfromcad.PaperTextFont);
             }
 
             // -----------------------------
             // ByLayer
             // -----------------------------
 
-            if (selectedOptions.Contains(keyEntByLayer) && results.ByLayer.Any())
+            if (selectedOptions.Contains(keys.EntByLayer) && resultsfromcad.ByLayer.Any())
             {
-                exportData.Add(keyEntByLayer, results.ByLayer);
+                exportData.Add(keys.EntByLayer, resultsfromcad.ByLayer);
             }
 
             // -----------------------------
             // Revision Clouds
             // -----------------------------
 
-            if (selectedOptions.Contains(keyRevCloud) && results.RevisionClouds.Any())
+            if (selectedOptions.Contains(keys.RevCloud) && resultsfromcad.RevisionClouds.Any())
             {
-                exportData.Add(keyRevCloud, results.RevisionClouds);
+                exportData.Add(keys.RevCloud, resultsfromcad.RevisionClouds);
             }
 
             // -----------------------------
             // Block Attributes
             // -----------------------------
 
-            if (selectedOptions.Contains(keyAttrBlockRef) && results.BlockAttributes.Any())
+            if (selectedOptions.Contains(keys.AttrBlockRef) && resultsfromcad.BlockAttributes.Any())
             {
-                exportData.Add(keyAttrBlockRef, results.BlockAttributes);
+                exportData.Add(keys.AttrBlockRef, resultsfromcad.BlockAttributes);
             }
 
             // -----------------------------
             // Plot Tags
             // -----------------------------
 
-            if (selectedOptions.Contains(keyPlotTag) && results.PlotTags.Any())
+            if (selectedOptions.Contains(keys.PlotTag) && resultsfromcad.PlotTags.Any())
             {
-                exportData.Add(keyPlotTag, results.PlotTags);
+                exportData.Add(keys.PlotTag, resultsfromcad.PlotTags);
             }
 
             // return
@@ -168,23 +175,13 @@ namespace TYPSA.PS.RibbonButton.Autocad
         )
         {
             // Acumulador
-            ModelCheckerResults results = new ModelCheckerResults();
+            ModelCheckerResults resultsfromcad = new ModelCheckerResults();
+            ModelCheckerKeys keys = new ModelCheckerKeys(isSpanish);
+
             // Variables para recopilar métricas
             int totalSelectedFiles = selectedFiles.Length;
             int filesSelectedProcessed = 0;
             int percentage = 0;
-
-            // Claves segun idioma
-            string keyProjectUnits = AteneaModelCheckerOptionsLocalized.ProjectUnits(isSpanish);
-            string keyLayersInUse = AteneaModelCheckerOptionsLocalized.LayersInUse(isSpanish);
-            string keyLayerZero = AteneaModelCheckerOptionsLocalized.LayerZero(isSpanish);
-            string keyVersion = AteneaModelCheckerOptionsLocalized.Version(isSpanish);
-            string keyXrefs = AteneaModelCheckerOptionsLocalized.Xrefs(isSpanish);
-            string keyPaperTextFont = AteneaModelCheckerOptionsLocalized.PaperTextFont(isSpanish);
-            string keyEntByLayer = AteneaModelCheckerOptionsLocalized.ByLayerProperties(isSpanish);
-            string keyRevCloud = AteneaModelCheckerOptionsLocalized.RevisionClouds(isSpanish);
-            string keyAttrBlockRef = AteneaModelCheckerOptionsLocalized.BlockAttributes(isSpanish);
-            string keyPlotTag = AteneaModelCheckerOptionsLocalized.PlotTag(isSpanish);
 
             // Creamos una lista vacia para almacenar diccionario global
             List<Dictionary<string, object>> dataJsonByModel = new List<Dictionary<string, object>>();
@@ -255,7 +252,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Project Units
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyProjectUnits))
+                                        if (selectedOptions.Contains(keys.ProjectUnits))
                                         {
                                             ProjectUnitsResult units = AnalyzeUnits(db, fileName);
                                             // Validamos
@@ -264,7 +261,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyProjectUnits,
+                                                    CheckName = keys.ProjectUnits,
                                                     Message = "Selected check was executed, but no project units information was detected."
                                                 });
                                             }
@@ -276,19 +273,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyProjectUnits,
+                                                        CheckName = keys.ProjectUnits,
                                                         Message = $"Project units are set to '{units.Units}' instead of meters."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.ProjectUnits.Add(units);
+                                                resultsfromcad.ProjectUnits.Add(units);
                                             }
                                            
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyProjectUnits, units }
+                                                { keys.ProjectUnits, units }
                                             });
                                         }
 
@@ -296,7 +293,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Layers in Use
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyLayersInUse))
+                                        if (selectedOptions.Contains(keys.LayersInUse))
                                         {
                                             List<LayerUsageResult> layersInUse = AnalyzeLayers(
                                                 tr, db, bt, fileName
@@ -307,7 +304,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyLayersInUse,
+                                                    CheckName = keys.LayersInUse,
                                                     Message = "Selected check was executed, but no layers in use were detected."
                                                 });
                                             }
@@ -324,19 +321,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyLayersInUse,
+                                                        CheckName = keys.LayersInUse,
                                                         Message = "One or more layers exist in the drawing but are not in use."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.LayersInUse.AddRange(layersInUse);
+                                                resultsfromcad.LayersInUse.AddRange(layersInUse);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyLayersInUse, layersInUse }
+                                                { keys.LayersInUse, layersInUse }
                                             });
                                         }
 
@@ -344,7 +341,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Layer Zero
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyLayerZero))
+                                        if (selectedOptions.Contains(keys.LayerZero))
                                         {
                                             LayerZeroUsageResult entLayerZero = AnalyzeLayerZero(
                                                 tr, db, bt, fileName
@@ -355,7 +352,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyLayerZero,
+                                                    CheckName = keys.LayerZero,
                                                     Message = "Selected check was executed, but no layer zero information was detected."
                                                 });
                                             }
@@ -367,19 +364,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyLayerZero,
+                                                        CheckName = keys.LayerZero,
                                                         Message = "One or more entities exist in layer 0."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.LayerZero.Add(entLayerZero);
+                                                resultsfromcad.LayerZero.Add(entLayerZero);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyLayerZero, entLayerZero }
+                                                { keys.LayerZero, entLayerZero }
                                             });
                                         }
 
@@ -387,7 +384,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Version Archivo
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyVersion))
+                                        if (selectedOptions.Contains(keys.Version))
                                         {
                                             AcadVersionResult version = AnalyzeVersionMapped(
                                                 db, fileName
@@ -398,20 +395,20 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyVersion,
+                                                    CheckName = keys.Version,
                                                     Message = "Selected check was executed, but no AutoCAD version information was detected."
                                                 });
                                             }
                                             else
                                             {
                                                 // Almacenamos
-                                                results.Version.Add(version);
+                                                resultsfromcad.Version.Add(version);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyVersion, version }
+                                                { keys.Version, version }
                                             });
                                         }
 
@@ -419,7 +416,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Xref
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyXrefs))
+                                        if (selectedOptions.Contains(keys.Xrefs))
                                         {
                                             List<XrefStatusResult> xrefs = AnalyzeXrefs(
                                                 bt, tr, fileName
@@ -440,19 +437,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyXrefs,
+                                                        CheckName = keys.Xrefs,
                                                         Message = "One or more external references are unloaded in this file."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.Xrefs.AddRange(xrefs);
+                                                resultsfromcad.Xrefs.AddRange(xrefs);
                                             }
                                            
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyXrefs, xrefs }
+                                                { keys.Xrefs, xrefs }
                                             });
                                         }
 
@@ -460,10 +457,10 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Labels Font
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyPaperTextFont))
+                                        if (selectedOptions.Contains(keys.PaperTextFont))
                                         {
                                             List<PaperTextFontResult> paperFonts = AnalyzeTextFont(
-                                                tr, db, fileName
+                                                tr, db, fileName, TngModelCheckerDefaults.ExpectedPaperTextFont
                                             );
                                             // Validamos
                                             if (paperFonts == null || paperFonts.Count == 0)
@@ -471,7 +468,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyPaperTextFont,
+                                                    CheckName = keys.PaperTextFont,
                                                     Message = "Selected check was executed, but no paper space text entities were detected."
                                                 });
                                             }
@@ -488,19 +485,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyPaperTextFont,
+                                                        CheckName = keys.PaperTextFont,
                                                         Message = "One or more paper space text entities use a font different from the required font."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.PaperTextFont.AddRange(paperFonts);
+                                                resultsfromcad.PaperTextFont.AddRange(paperFonts);
                                             }
                                            
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyPaperTextFont, paperFonts }
+                                                { keys.PaperTextFont, paperFonts }
                                             });
                                         }
 
@@ -508,7 +505,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Properties ByLayer
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyEntByLayer))
+                                        if (selectedOptions.Contains(keys.EntByLayer))
                                         {
                                             //SetByLayerProperties(tr, db, bt);
                                             List<ByLayerEntityResult> byLayerResults = AnalyzeByLayer(
@@ -520,8 +517,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyEntByLayer,
-                                                    Message = "Selected check was executed, but no ByLayer validation results were detected."
+                                                    CheckName = keys.EntByLayer,
+                                                    Message = "Selected check was executed, but no ByLayer validation resultsfromcad were detected."
                                                 });
                                             }
                                             else
@@ -542,19 +539,19 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                     warningChecksLog.Add(new WarningCheckLogResult
                                                     {
                                                         FileName = fileName,
-                                                        CheckName = keyEntByLayer,
+                                                        CheckName = keys.EntByLayer,
                                                         Message = "One or more entities have properties that are not set to ByLayer."
                                                     });
                                                 }
 
                                                 // Almacenamos
-                                                results.ByLayer.AddRange(byLayerResults);
+                                                resultsfromcad.ByLayer.AddRange(byLayerResults);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyEntByLayer, byLayerResults }
+                                                { keys.EntByLayer, byLayerResults }
                                             });
                                         }
 
@@ -562,7 +559,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Revision cloud
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyRevCloud))
+                                        if (selectedOptions.Contains(keys.RevCloud))
                                         {
                                             List<RevisionCloudResult> clouds = AnalyzeRevisionClouds(
                                                 tr, db, bt, fileName
@@ -573,18 +570,18 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyRevCloud,
+                                                    CheckName = keys.RevCloud,
                                                     Message = "One or more revision clouds were detected in this file."
                                                 });
 
                                                 // Almacenamos
-                                                results.RevisionClouds.AddRange(clouds);
+                                                resultsfromcad.RevisionClouds.AddRange(clouds);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyRevCloud, clouds }
+                                                { keys.RevCloud, clouds }
                                             });
                                         }
 
@@ -592,10 +589,11 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Block Attributes
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyAttrBlockRef))
+                                        if (selectedOptions.Contains(keys.AttrBlockRef))
                                         {
                                             List<BlockAttributesResult> blockAttrs = AnalyzeBlockAttributes(
-                                                tr, db, bt, fileName, "FUT_Namnruta_"
+                                                tr, db, bt, fileName, 
+                                                TngModelCheckerDefaults.BlockAttributesName
                                             );
                                             // Validamos
                                             if (blockAttrs == null || blockAttrs.Count == 0)
@@ -603,20 +601,20 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyAttrBlockRef,
+                                                    CheckName = keys.AttrBlockRef,
                                                     Message = "Selected check was executed, but no matching block references containing 'FUT_Namnruta_' were detected."
                                                 });
                                             }
                                             else
                                             {
                                                 // Almacenamos
-                                                results.BlockAttributes.AddRange(blockAttrs);
+                                                resultsfromcad.BlockAttributes.AddRange(blockAttrs);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyAttrBlockRef, blockAttrs }
+                                                { keys.AttrBlockRef, blockAttrs }
                                             });
                                         }
 
@@ -624,13 +622,12 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         // Plot Tag
                                         // -----------------------------
 
-                                        if (selectedOptions.Contains(keyPlotTag))
+                                        if (selectedOptions.Contains(keys.PlotTag))
                                         {
-                                            // Textos referencia
-                                            List<string> referenceTexts = 
-                                                new List<string> {"Ritningsfil:", "Plottdatum:", "Plottad av:"};
                                             List<PlotInfoResult> plotTags = AnalyzePlotTagInfo(
-                                                tr, db, bt, fileName, referenceTexts, "FUT_Ritningsram_"
+                                                tr, db, bt, fileName, 
+                                                TngModelCheckerDefaults.PlotTagReferenceTexts,
+                                                TngModelCheckerDefaults.PlotTagBlockName
                                             );
                                             // Validamos
                                             if (plotTags == null || plotTags.Count == 0)
@@ -638,20 +635,39 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                                 warningChecksLog.Add(new WarningCheckLogResult
                                                 {
                                                     FileName = fileName,
-                                                    CheckName = keyPlotTag,
+                                                    CheckName = keys.PlotTag,
                                                     Message = "Selected check was executed, but no matching plot information block references containing 'FUT_Ritningsram_' were detected."
                                                 });
                                             }
                                             else
                                             {
+                                                // -----------------------------
+                                                // Buscar referencias no encontradas
+                                                // -----------------------------
+
+                                                bool hasMissingReferenceTexts = plotTags.Any(
+                                                    x => x != null && !x.IsFound
+                                                );
+                                                // Validamos
+                                                if (hasMissingReferenceTexts)
+                                                {
+                                                    warningChecksLog.Add(new WarningCheckLogResult
+                                                    {
+                                                        FileName = fileName,
+                                                        CheckName = keys.PlotTag,
+                                                        Message = $"One or more required plot tag references ({string.Join(", ", TngModelCheckerDefaults.PlotTagReferenceTexts)}) " +
+                                                            $"are missing or do not contain a valid associated value."
+                                                    });
+                                                }
+
                                                 // Almacenamos
-                                                results.PlotTags.AddRange(plotTags);
+                                                resultsfromcad.PlotTags.AddRange(plotTags);
                                             }
 
                                             // Almacenamos
                                             extractedData.Add(new Dictionary<string, object>
                                             {
-                                                { keyPlotTag, plotTags }
+                                                { keys.PlotTag, plotTags }
                                             });
                                         }
 
@@ -726,10 +742,9 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
                     // Comprobamos info a exportar
                     bool hasData = 
-                        results.ProjectUnits.Any() || results.LayersInUse.Any() || results.LayerZero.Any() || 
-                        results.Version.Any() || results.Xrefs.Any() ||
-                        results.PaperTextFont.Any() || results.ByLayer.Any() || results.RevisionClouds.Any() ||
-                        results.BlockAttributes.Any() || results.PlotTags.Any();
+                        resultsfromcad.ProjectUnits.Any() || resultsfromcad.LayersInUse.Any() || resultsfromcad.LayerZero.Any() || 
+                        resultsfromcad.Version.Any() || resultsfromcad.Xrefs.Any() || resultsfromcad.PaperTextFont.Any() || resultsfromcad.ByLayer.Any() || 
+                        resultsfromcad.RevisionClouds.Any() || resultsfromcad.BlockAttributes.Any() || resultsfromcad.PlotTags.Any();
                     // Validamos
                     if (hasData || warningChecksLog.Any())
                     {
@@ -738,7 +753,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                         // ---------------------------------
 
                         Dictionary<string, object> exportData = GetExportData(
-                            isSpanish, selectedOptions, results
+                            keys, selectedOptions, resultsfromcad
                         );
 
                         // ---------------------------------
