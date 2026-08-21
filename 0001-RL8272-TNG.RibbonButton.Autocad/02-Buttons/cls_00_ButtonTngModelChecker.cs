@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using TYPSA.SharedLib.Autocad.Buttons;
 using TYPSA.SharedLib.Autocad.Main;
-using TYPSA.SharedLib.Excel;
 using TYPSA.SharedLib.UserForms;
 
 namespace TYPSA.PS.RibbonButton.Autocad

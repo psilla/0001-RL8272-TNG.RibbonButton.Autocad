@@ -93,24 +93,36 @@
     <Folder Include="04-Source\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\0000-TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad.csproj">
-      <Project>{631b9318-a021-4b24-87f0-3fec637eae77}</Project>
-      <Name>TYPSA.SharedLibAutocad</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\0000-TYPSA.SharedLibExcel\TYPSA.SharedLibExcel\TYPSA.SharedLibExcel.csproj">
-      <Project>{ff31b661-8ce6-420f-8720-f077b273e9c6}</Project>
-      <Name>TYPSA.SharedLibExcel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\0000-TYPSA.SharedLibForms\TYPSA.SharedLibForms\TYPSA.SharedLibForms.csproj">
-      <Project>{8f836313-b339-4db6-8a55-af61386871b4}</Project>
-      <Name>TYPSA.SharedLibForms</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad\TYPSA.SharedLibAutocad.csproj">
+      <Project>{631b9318-a021-4b24-87f0-3fec637eae77}</Project>
+      <Name>TYPSA.SharedLibAutocad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibEndPoints\TYPSA.SharedLibEndPoints\TYPSA.SharedLibEndPoints.csproj">
+      <Project>{db670f85-371e-4bce-9253-f2bdd6a66dea}</Project>
+      <Name>TYPSA.SharedLibEndPoints</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibExcelAutocad\TYPSA.SharedLibExcelAutocad\TYPSA.SharedLibExcelAutocad.csproj">
+      <Project>{2871f6ca-5b41-46fd-acb5-421486273b5d}</Project>
+      <Name>TYPSA.SharedLibExcelAutocad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibForms\TYPSA.SharedLibForms\TYPSA.SharedLibForms.csproj">
+      <Project>{8f836313-b339-4db6-8a55-af61386871b4}</Project>
+      <Name>TYPSA.SharedLibForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibJson\TYPSA.SharedLibJson\TYPSA.SharedLibJson.csproj">
+      <Project>{ebc38772-93a0-4f36-97be-d47ba2e37bda}</Project>
+      <Name>TYPSA.SharedLibJson</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\0000-TYPSA.SharedLib\0000-TYPSA.SharedLibMetrics\TYPSA.SharedLibMetrics\TYPSA.SharedLibMetrics.csproj">
+      <Project>{bcf44feb-fc98-4906-ad0d-41552211b828}</Project>
+      <Name>TYPSA.SharedLibMetrics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

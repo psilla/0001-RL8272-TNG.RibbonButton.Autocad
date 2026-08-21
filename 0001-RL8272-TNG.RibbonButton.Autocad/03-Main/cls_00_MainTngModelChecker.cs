@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
-using Newtonsoft.Json;
 using TYPSA.SharedLib.Autocad.GetDocument;
 using TYPSA.SharedLib.Autocad.Main;
-using TYPSA.SharedLib.Excel;
+using TYPSA.SharedLib.EndPoints;
 using TYPSA.SharedLib.UserForms;
+using TYPSA.SharedLib.Json;
 using static TYPSA.SharedLib.Autocad.Main.cls_00_CadInfoHelper;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckAcadVersion;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckBlockAttr;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckByLayerProp;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckEntInLayerZero;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckLayersInUse;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckPaperTextFont;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckProjUnits;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckRevClouds;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainCheckXrefs;
-using static TYPSA.SharedLib.Autocad.Main.cls_00_MainGetPlogTag;
 using Application = Autodesk.AutoCAD.ApplicationServices.Application;
+using TYPSA.SharedLib.ExcelAutocad;
+using TYPSA.SharedLib.Metrics;
 
 
 namespace TYPSA.PS.RibbonButton.Autocad
@@ -53,13 +44,6 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
         public static readonly List<string> PlotTagReferenceTexts =
             new List<string> {PlotFileText, PlotDateText, PlotUserText};
-    }
-    
-    public class WarningCheckLogResult
-    {
-        public string FileName { get; set; }
-        public string CheckName { get; set; }
-        public string Message { get; set; }
     }
 
     public class cls_00_MainTngModelChecker
@@ -166,6 +150,29 @@ namespace TYPSA.PS.RibbonButton.Autocad
             return exportData;
         }
 
+        private static void SkipNullFile(
+            bool isSpanish,
+            string fileName,
+            ref int processedFiles,
+            int totalFiles,
+            int percentage,
+            ProgressBarControl progressBarForm,
+            int durationMs = 1000
+        )
+        {
+            // Mostramos
+            new AutoCloseMessageForm(
+                isSpanish
+                    ? $"El documento '{fileName}' no se pudo abrir."
+                    : $"The document '{fileName}' could not be opened.",
+                durationMs
+            ).ShowDialog();
+            // Actualizar progreso
+            processedFiles++;
+            percentage = (int)((double)processedFiles / totalFiles * 100);
+            progressBarForm.ProgressValue = percentage;
+        }
+
         public ProcessResult MainTgnModelChecker(
             string[] selectedFiles,
             string projectCode,
@@ -174,671 +181,444 @@ namespace TYPSA.PS.RibbonButton.Autocad
             CadSessionInfo info
         )
         {
-            // Acumulador
+            // -------------------------------
+            // Definir variables
+            // -------------------------------
+
+            List<Dictionary<string, object>> dataJsonByModel = new List<Dictionary<string, object>>();
+            List<WarningCheckLogResult> warningChecksLog = new List<WarningCheckLogResult>();
+            List<List<string>> dataToExcelGlobal = new List<List<string>>();
             ModelCheckerResults resultsfromcad = new ModelCheckerResults();
             ModelCheckerKeys keys = new ModelCheckerKeys(isSpanish);
+            string msg = string.Empty;
 
-            // Variables para recopilar métricas
-            int totalSelectedFiles = selectedFiles.Length;
-            int filesSelectedProcessed = 0;
+            // -------------------------------
+            // Tiempos de ejecución
+            // -------------------------------
+
+            // Global
+            Dictionary<string, TimeSpan> processDurations = new Dictionary<string, TimeSpan>();
+            // Modelo
+            Dictionary<string, Dictionary<string, TimeSpan>> processDurationsByModel =
+                new Dictionary<string, Dictionary<string, TimeSpan>>();
+
+            Stopwatch totalStopwatch = Stopwatch.StartNew();
+
+            // -------------------------------
+            // Normalizar idioma
+            // -------------------------------
+
+            string softwareLanguage = isSpanish ? "Spanish" : "English";
+
+            // -------------------------------
+            // Obtener informacion
+            // -------------------------------
+
+            string keyElementData = cls_00_AteneaJson.CivilElementData;
+            string keyFileName = cls_00_AteneaJson.FileName;
+
+            // -------------------------------
+            // Crear progreso
+            // -------------------------------
+
+            ProgressBarControl progressBarForm = new ProgressBarControl();
+            // Iniciamos variables
+            int totalFiles = selectedFiles.Length;
+            int processedFiles = 0;
             int percentage = 0;
 
-            // Creamos una lista vacia para almacenar diccionario global
-            List<Dictionary<string, object>> dataJsonByModel = new List<Dictionary<string, object>>();
+            // Mostramos
+            progressBarForm.ProgressValue = 10; // Valor inicial 
+            progressBarForm.Show();
 
-            // Log global
-            List<WarningCheckLogResult> warningChecksLog = new List<WarningCheckLogResult>();
-
-            List<List<string>> dataToExcelGlobal = new List<List<string>>();
-            // Crear el formulario de la barra de progreso
-            using (ProgressBarControl progressBarForm = new ProgressBarControl())
+            // try
+            try
             {
-                // Mostramos barra de progreso
-                progressBarForm.Show();
+                // -----------------------------
+                // Iniciar cronometro modelos
+                // -----------------------------
 
-                // try
-                try
+                string msgIter = cls_00_ProcessMessages.ShowProcessMessage(
+                    isSpanish, cls_00_ProcessMessages.StartDocumentProcessing
+                );
+
+                Stopwatch filesProcessingStopwatch = Stopwatch.StartNew();
+
+                // -----------------------------
+                // Iterar archivos
+                // -----------------------------
+
+                foreach (string file in selectedFiles)
                 {
-                    // Iterar sobre los archivos seleccionados
-                    foreach (string file in selectedFiles)
-                    {
-                        // Obtener el nombre sin extensión
-                        string fileName = System.IO.Path.GetFileNameWithoutExtension(file);
+                    // -------------------------------
+                    // Definir variables
+                    // -------------------------------
 
-                        // try
-                        try
-                        {
-                            // Abrir el documento
-                            using (Document openedDoc = Application.DocumentManager.Open(file, false))
-                            {
-                                // Validamos
-                                if (openedDoc == null)
-                                {
-                                    // Mensaje
-                                    new AutoCloseMessageForm(
-                                        $"Error opening document:\n{file}"
-                                    ).ShowDialog();
-                                    // Actualizar la barra de progreso
-                                    filesSelectedProcessed++;
-                                    percentage = (int)((double)filesSelectedProcessed / totalSelectedFiles * 100);
-                                    progressBarForm.ProgressValue = percentage;
-                                    // Obviamos
-                                    continue;
-                                }
+                    List<Dictionary<string, object>> extractedData = new List<Dictionary<string, object>>();
 
-                                // Mostramos
-                                new AutoCloseMessageForm(
-                                    $"Processing file {filesSelectedProcessed + 1} of {totalSelectedFiles}:\n\n{fileName}.dwg", 1000
-                                ).ShowDialog();
+                    string fileName = System.IO.Path.GetFileNameWithoutExtension(file);
 
-                                // Obtenemos variables
-                                Database db = openedDoc.Database;
-                                Editor ed = cls_00_DocumentInfo.GetEditor(openedDoc);
-
-                                // Bloquear el documento
-                                using (openedDoc.LockDocument())
-                                using (Transaction tr = openedDoc.TransactionManager.StartTransaction())
-                                {
-                                    // try
-                                    try
-                                    {
-                                        // Obtener BlockTable
-                                        BlockTable bt = cls_00_DocumentInfo.GetBlockTableForRead(tr, db);
-
-                                        // Inicializamos la lista
-                                        List<Dictionary<string, object>> extractedData = new List<Dictionary<string, object>>();
-
-                                        // -----------------------------
-                                        // Project Units
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.ProjectUnits))
-                                        {
-                                            ProjectUnitsResult units = AnalyzeUnits(db, fileName);
-                                            // Validamos
-                                            if (units == null)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.ProjectUnits,
-                                                    Message = "Selected check was executed, but no project units information was detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // Validamos que sean metros
-                                                if (!units.IsMeters)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.ProjectUnits,
-                                                        Message = $"Project units are set to '{units.Units}' instead of meters."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.ProjectUnits.Add(units);
-                                            }
-                                           
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.ProjectUnits, units }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Layers in Use
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.LayersInUse))
-                                        {
-                                            List<LayerUsageResult> layersInUse = AnalyzeLayers(
-                                                tr, db, bt, fileName
-                                            );
-                                            // Validamos
-                                            if (layersInUse == null || layersInUse.Count == 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.LayersInUse,
-                                                    Message = "Selected check was executed, but no layers in use were detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // -----------------------------
-                                                // Buscar capas sin uso
-                                                // -----------------------------
-
-                                                bool hasUnusedLayers = layersInUse.Any(x => x != null && !x.IsUsed);
-                                                // Validamos
-                                                if (hasUnusedLayers)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.LayersInUse,
-                                                        Message = "One or more layers exist in the drawing but are not in use."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.LayersInUse.AddRange(layersInUse);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.LayersInUse, layersInUse }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Layer Zero
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.LayerZero))
-                                        {
-                                            LayerZeroUsageResult entLayerZero = AnalyzeLayerZero(
-                                                tr, db, bt, fileName
-                                            );
-                                            // Validamos
-                                            if (entLayerZero == null)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.LayerZero,
-                                                    Message = "Selected check was executed, but no layer zero information was detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // Validamos si hay entidades en capa 0
-                                                if (entLayerZero.IsUsed)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.LayerZero,
-                                                        Message = "One or more entities exist in layer 0."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.LayerZero.Add(entLayerZero);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.LayerZero, entLayerZero }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Version Archivo
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.Version))
-                                        {
-                                            AcadVersionResult version = AnalyzeVersionMapped(
-                                                db, fileName
-                                            );
-                                            // Validamos
-                                            if (version == null)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.Version,
-                                                    Message = "Selected check was executed, but no AutoCAD version information was detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // Almacenamos
-                                                resultsfromcad.Version.Add(version);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.Version, version }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Xref
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.Xrefs))
-                                        {
-                                            List<XrefStatusResult> xrefs = AnalyzeXrefs(
-                                                bt, tr, fileName
-                                            );
-                                            // Validamos que existan Xrefs
-                                            if (xrefs != null && xrefs.Count > 0)
-                                            {
-                                                // -----------------------------
-                                                // Verificar si alguna Xref está descargada
-                                                // -----------------------------
-
-                                                bool hasUnloadedXrefs = xrefs.Any(x =>
-                                                    x != null && !x.IsLoaded
-                                                );
-                                                // Añadimos unico warning
-                                                if (hasUnloadedXrefs)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.Xrefs,
-                                                        Message = "One or more external references are unloaded in this file."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.Xrefs.AddRange(xrefs);
-                                            }
-                                           
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.Xrefs, xrefs }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Labels Font
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.PaperTextFont))
-                                        {
-                                            List<PaperTextFontResult> paperFonts = AnalyzeTextFont(
-                                                tr, db, fileName, TngModelCheckerDefaults.ExpectedPaperTextFont
-                                            );
-                                            // Validamos
-                                            if (paperFonts == null || paperFonts.Count == 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.PaperTextFont,
-                                                    Message = "Selected check was executed, but no paper space text entities were detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // -----------------------------
-                                                // Buscar fuentes distintas a la requerida
-                                                // -----------------------------
-
-                                                bool hasUnexpectedFonts = paperFonts.Any(x => x != null && !x.IsExpected);
-                                                // Validamos
-                                                if (hasUnexpectedFonts)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.PaperTextFont,
-                                                        Message = "One or more paper space text entities use a font different from the required font."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.PaperTextFont.AddRange(paperFonts);
-                                            }
-                                           
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.PaperTextFont, paperFonts }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Properties ByLayer
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.EntByLayer))
-                                        {
-                                            //SetByLayerProperties(tr, db, bt);
-                                            List<ByLayerEntityResult> byLayerResults = AnalyzeByLayer(
-                                                tr, db, bt, fileName, isSpanish
-                                            );
-                                            // Validamos
-                                            if (byLayerResults == null || byLayerResults.Count == 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.EntByLayer,
-                                                    Message = "Selected check was executed, but no ByLayer validation resultsfromcad were detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // -----------------------------
-                                                // Buscar entidades con propiedades no ByLayer
-                                                // -----------------------------
-
-                                                bool hasNotByLayerProperties = byLayerResults.Any(x => x != null &&
-                                                (
-                                                    x.IsColorByLayer == false ||
-                                                    x.IsLinetypeByLayer == false ||
-                                                    x.IsLineweightByLayer == false
-                                                ));
-                                                // Validamos
-                                                if (hasNotByLayerProperties)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.EntByLayer,
-                                                        Message = "One or more entities have properties that are not set to ByLayer."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.ByLayer.AddRange(byLayerResults);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.EntByLayer, byLayerResults }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Revision cloud
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.RevCloud))
-                                        {
-                                            List<RevisionCloudResult> clouds = AnalyzeRevisionClouds(
-                                                tr, db, bt, fileName
-                                            );
-                                            // Validamos
-                                            if (clouds != null && clouds.Count > 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.RevCloud,
-                                                    Message = "One or more revision clouds were detected in this file."
-                                                });
-
-                                                // Almacenamos
-                                                resultsfromcad.RevisionClouds.AddRange(clouds);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.RevCloud, clouds }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Block Attributes
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.AttrBlockRef))
-                                        {
-                                            List<BlockAttributesResult> blockAttrs = AnalyzeBlockAttributes(
-                                                tr, db, bt, fileName, 
-                                                TngModelCheckerDefaults.BlockAttributesName
-                                            );
-                                            // Validamos
-                                            if (blockAttrs == null || blockAttrs.Count == 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.AttrBlockRef,
-                                                    Message = "Selected check was executed, but no matching block references containing 'FUT_Namnruta_' were detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // Almacenamos
-                                                resultsfromcad.BlockAttributes.AddRange(blockAttrs);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.AttrBlockRef, blockAttrs }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Plot Tag
-                                        // -----------------------------
-
-                                        if (selectedOptions.Contains(keys.PlotTag))
-                                        {
-                                            List<PlotInfoResult> plotTags = AnalyzePlotTagInfo(
-                                                tr, db, bt, fileName, 
-                                                TngModelCheckerDefaults.PlotTagReferenceTexts,
-                                                TngModelCheckerDefaults.PlotTagBlockName
-                                            );
-                                            // Validamos
-                                            if (plotTags == null || plotTags.Count == 0)
-                                            {
-                                                warningChecksLog.Add(new WarningCheckLogResult
-                                                {
-                                                    FileName = fileName,
-                                                    CheckName = keys.PlotTag,
-                                                    Message = "Selected check was executed, but no matching plot information block references containing 'FUT_Ritningsram_' were detected."
-                                                });
-                                            }
-                                            else
-                                            {
-                                                // -----------------------------
-                                                // Buscar referencias no encontradas
-                                                // -----------------------------
-
-                                                bool hasMissingReferenceTexts = plotTags.Any(
-                                                    x => x != null && !x.IsFound
-                                                );
-                                                // Validamos
-                                                if (hasMissingReferenceTexts)
-                                                {
-                                                    warningChecksLog.Add(new WarningCheckLogResult
-                                                    {
-                                                        FileName = fileName,
-                                                        CheckName = keys.PlotTag,
-                                                        Message = $"One or more required plot tag references ({string.Join(", ", TngModelCheckerDefaults.PlotTagReferenceTexts)}) " +
-                                                            $"are missing or do not contain a valid associated value."
-                                                    });
-                                                }
-
-                                                // Almacenamos
-                                                resultsfromcad.PlotTags.AddRange(plotTags);
-                                            }
-
-                                            // Almacenamos
-                                            extractedData.Add(new Dictionary<string, object>
-                                            {
-                                                { keys.PlotTag, plotTags }
-                                            });
-                                        }
-
-                                        // -----------------------------
-                                        // Crear Estructura Json By File
-                                        // -----------------------------
-
-                                        // Creamos la estructura
-                                        Dictionary<string, object> fileDataByDoc = new Dictionary<string, object>
-                                        {
-                                            { AteneaJson.FileName, fileName },
-                                            { AteneaJson.CivilElementData, extractedData }
-                                        };
-
-                                        // -----------------------------
-                                        // Añadir Json
-                                        // -----------------------------
-
-                                        dataJsonByModel.Add(fileDataByDoc);
-
-                                        // -----------------------------
-                                        // Cerrar transaccion
-                                        // -----------------------------
-
-                                        tr.Commit();
-                                    }
-                                    // catch
-                                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                                    {
-                                        warningChecksLog.Add(new WarningCheckLogResult
-                                        {
-                                            FileName = fileName,
-                                            CheckName = "Processing Error",
-                                            Message = ex.Message
-                                        });
-
-                                        // Mensaje
-                                        new AutoCloseMessageForm(
-                                            $"Error while processing '{file}':\n{ex.Message}"
-                                        ).ShowDialog();
-                                    }
-                                }
-
-                                // Cerramos y descartamos documento
-                                openedDoc.CloseAndDiscard();
-
-                                // Actualizar la barra de progreso
-                                filesSelectedProcessed++;
-                                percentage = (int)((double)filesSelectedProcessed / totalSelectedFiles * 100);
-                                progressBarForm.ProgressValue = percentage;
-                            }
-                        }
-                        // catch
-                        catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                        {
-                            warningChecksLog.Add(new WarningCheckLogResult
-                            {
-                                FileName = fileName,
-                                CheckName = "Fatal File Error",
-                                Message = ex.Message
-                            });
-
-                            // Mensaje
-                            MessageBox.Show(
-                                $"EXCEPTION:\n{ex.Message}\n{ex.StackTrace}"
-                            );
-                        }
-                    }
-
-                    // Cerramos
-                    progressBarForm.Close();
-
-                    // Comprobamos info a exportar
-                    bool hasData = 
-                        resultsfromcad.ProjectUnits.Any() || resultsfromcad.LayersInUse.Any() || resultsfromcad.LayerZero.Any() || 
-                        resultsfromcad.Version.Any() || resultsfromcad.Xrefs.Any() || resultsfromcad.PaperTextFont.Any() || resultsfromcad.ByLayer.Any() || 
-                        resultsfromcad.RevisionClouds.Any() || resultsfromcad.BlockAttributes.Any() || resultsfromcad.PlotTags.Any();
-                    // Validamos
-                    if (hasData || warningChecksLog.Any())
-                    {
-                        // ---------------------------------
-                        // Preparar datos exportacion
-                        // ---------------------------------
-
-                        Dictionary<string, object> exportData = GetExportData(
-                            keys, selectedOptions, resultsfromcad
-                        );
-
-                        // ---------------------------------
-                        // Validar
-                        // ---------------------------------
-
-                        if (warningChecksLog.Any())
-                        {
-                            exportData.Add("Warning Selected Checks Log", warningChecksLog);
-                        }
-
-                        // ---------------------------------
-                        // Exportar Excel
-                        // ---------------------------------
-
-                        cls_00_ExportModCheckToExcel_OpenXml.ExportDataToExcel(
-                            exportData
-                        );
-
-                        // ---------------------------------
-                        // Exportar html
-                        // ---------------------------------
-
-                        cls_00_ExportTgnCheckToHtml.ExportToHtml(
-                            exportData, warningChecksLog, projectCode, totalSelectedFiles, filesSelectedProcessed
-                        );
-                    }
-                    else
-                    {
-                        // Mensaje
-                        MessageBox.Show(
-                            "No data found for the selected checks.", "Atenea Model Checker",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information
-                        );
-                    }
+                    Dictionary<string, TimeSpan> modelDurations = new Dictionary<string, TimeSpan>();
 
                     // try
                     try
                     {
-                        // Preparar diccionario a enviar
-                        Dictionary<string, object> dictDataByFileToJson = GetFinalJsonDictionary(
-                            projectCode, dataJsonByModel
+                        // -------------------------------
+                        // Abrir documento
+                        // -------------------------------
+
+                        msg = cls_00_ProcessMessages.ShowProcessMessage(
+                            isSpanish, cls_00_ProcessMessages.OpenDocument, processedFiles + 1, totalFiles, fileName
                         );
-                        // Serializar el diccionario a formato JSON con indentación
-                        string jsonContent = JsonConvert.SerializeObject(
-                            dictDataByFileToJson, Formatting.Indented
-                        );
-                        // Guardamos el Json
-                        SaveJsonToDesktop(
-                            isSpanish, jsonContent, projectCode, info.RootFolderName, info.JsonFileNameDataExtraction
-                        );
+
+                        Stopwatch modelProcessStopwatch = Stopwatch.StartNew();
+                      
+                        using (Document openedDoc = Application.DocumentManager.Open(file, false))
+                        {
+                            cls_00_ProcessMessages.AddProcessDuration(
+                                modelDurations, msg, modelProcessStopwatch
+                            );
+
+                            // -------------------------------
+                            // Validar documento
+                            // -------------------------------
+
+                            if (openedDoc == null)
+                            {
+                                // Obviamos
+                                SkipNullFile(
+                                    isSpanish, fileName, ref processedFiles, totalFiles, percentage, progressBarForm
+                                );
+                                continue;
+                            }
+
+                            // -------------------------------
+                            // Procesar documento
+                            // -------------------------------
+
+                            msg = cls_00_ProcessMessages.ShowProcessMessage(
+                                isSpanish, cls_00_ProcessMessages.AnalyzeDocument, processedFiles + 1, totalFiles, fileName
+                            );
+
+                            // -------------------------------
+                            // Obtener info
+                            // -------------------------------
+
+                            Database db = openedDoc.Database;
+                            Editor ed = cls_00_DocumentInfo.GetEditor(openedDoc);
+
+                            // -------------------------------
+                            // Bloquear el documento
+                            // -------------------------------
+
+                            using (openedDoc.LockDocument())
+                            using (Transaction tr = openedDoc.TransactionManager.StartTransaction())
+                            {
+                                // try
+                                try
+                                {
+                                    // Obtener BlockTable
+                                    BlockTable bt = cls_00_DocumentInfo.GetBlockTableForRead(tr, db);
+
+                                    // -------------------------------
+                                    // Procesar info
+                                    // -------------------------------
+
+                                    msg = cls_00_ProcessMessages.ShowProcessMessage(
+                                        isSpanish, cls_00_ProcessMessages.CollectModelData, fileName
+                                    );
+
+                                    modelProcessStopwatch = Stopwatch.StartNew();
+
+                                    cls_00_GetDataCadModelChecker.ProcessProjectUnits(
+                                        selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessLayersInUse(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessLayerZero(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessVersion(
+                                        selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessXrefs(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessPaperTextFont(
+                                        selectedOptions, keys, tr, db, fileName, warningChecksLog, resultsfromcad, extractedData,
+                                        TngModelCheckerDefaults.ExpectedPaperTextFont, applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessEntitiesByLayer(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        isSpanish, applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessRevisionClouds(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessBlockAttributes(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        TngModelCheckerDefaults.BlockAttributesName, applyCleanCheckName: false
+                                    );
+                                    cls_00_GetDataCadModelChecker.ProcessPlotTag(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
+                                        TngModelCheckerDefaults.PlotTagReferenceTexts, TngModelCheckerDefaults.PlotTagBlockName, applyCleanCheckName: false
+                                    );
+
+                                    cls_00_ProcessMessages.AddProcessDuration(modelDurations, msg, modelProcessStopwatch);
+
+                                    // -------------------------------
+                                    // Construir y almacenar informacion
+                                    // -------------------------------
+
+                                    msg = cls_00_ProcessMessages.ShowProcessMessage(
+                                        isSpanish, cls_00_ProcessMessages.TransformModelData, fileName
+                                    );
+
+                                    modelProcessStopwatch = Stopwatch.StartNew();
+
+                                    Dictionary<string, object> fileDataByDoc = new Dictionary<string, object>
+                                    {
+                                        { keyFileName, fileName },
+                                        { keyElementData, extractedData }
+                                    };
+
+                                    // Añadimos
+                                    dataJsonByModel.Add(fileDataByDoc);
+
+                                    // Añadimos
+                                    dataJsonByModel.Add(fileDataByDoc);
+
+                                    cls_00_ProcessMessages.AddProcessDuration(modelDurations, msg, modelProcessStopwatch);
+
+                                    // -----------------------------
+                                    // Cerrar transaccion
+                                    // -----------------------------
+
+                                    tr.Commit();
+                                }
+                                // catch
+                                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                                {
+                                    warningChecksLog.Add(new WarningCheckLogResult
+                                    {
+                                        FileName = fileName,
+                                        CheckName = "Processing Error",
+                                        Message = ex.Message
+                                    });
+
+                                    // Mensaje
+                                    new AutoCloseMessageForm(
+                                        $"Error while processing '{file}':\n{ex.Message}"
+                                    ).ShowDialog();
+                                }
+                            }
+
+                            // -----------------------------
+                            // Cerrar documento
+                            // -----------------------------
+
+                            msg = cls_00_ProcessMessages.ShowProcessMessage(
+                                isSpanish, cls_00_ProcessMessages.CloseDocument, processedFiles + 1, totalFiles, fileName
+                            );
+
+                            Stopwatch closeDocumentStopwatch = Stopwatch.StartNew();
+
+                            openedDoc.CloseAndDiscard();
+
+                            cls_00_ProcessMessages.AddProcessDuration(modelDurations, msg, closeDocumentStopwatch);
+
+                            // -------------------------------
+                            // Tiempo total de procesos registrados
+                            // -------------------------------
+
+                            if (modelDurations.Any())
+                            {
+                                TimeSpan modelTotalDuration = TimeSpan.FromTicks(
+                                    modelDurations.Values.Sum(x => x.Ticks)
+                                );
+
+                                modelDurations["Total"] = modelTotalDuration;
+
+                                // Guardamos los tiempos del modelo
+                                processDurationsByModel[fileName] = modelDurations;
+                            }
+
+                            // -----------------------------
+                            // Actualizar progreso
+                            // -----------------------------
+
+                            processedFiles++;
+                            percentage = (int)((double)processedFiles / totalFiles * 100);
+                            progressBarForm.ProgressValue = percentage;
+                        }
                     }
                     // catch
-                    catch (Exception ex)
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
                     {
-                        string inner = ex.InnerException != null
-                            ? $"\n\nInner:\n{ex.InnerException.Message}"
-                            : "";
-                        // Mostramos
+                        warningChecksLog.Add(new WarningCheckLogResult
+                        {
+                            FileName = fileName,
+                            CheckName = "Fatal File Error",
+                            Message = ex.Message
+                        });
+
+                        // Mensaje
                         MessageBox.Show(
-                            "Error generating JSON\n\n" + ex.Message + inner + "\n\nStack:\n" + ex.StackTrace,
-                            "JSON Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error
+                            $"EXCEPTION:\n{ex.Message}\n{ex.StackTrace}"
                         );
                     }
+                }
 
-                    // Enviar Metricas Serapis
-                    SerapisMetrics.InitializeMetricsAsync("6a3541d327f9ca81c8d1fa0d");
+                // Añadimos
+                cls_00_ProcessMessages.AddProcessDuration(processDurations, msgIter, filesProcessingStopwatch);
 
-                    // return
-                    return new ProcessResult
+                // -----------------------------
+                // Cerrar progreso
+                // -----------------------------
+
+                progressBarForm.Close();
+
+                // -----------------------------
+                // Validar info
+                // -----------------------------
+
+                msg = isSpanish
+                    ? "Validando la información recopilada de todos los documentos"
+                    : "Validating the information collected from all documents";
+                // Mensaje
+                new AutoCloseMessageForm(msg, 1000).ShowDialog();
+
+                bool hasData = 
+                    resultsfromcad.ProjectUnits.Any() || resultsfromcad.LayersInUse.Any() || resultsfromcad.LayerZero.Any() || 
+                    resultsfromcad.Version.Any() || resultsfromcad.Xrefs.Any() || resultsfromcad.PaperTextFont.Any() || resultsfromcad.ByLayer.Any() || 
+                    resultsfromcad.RevisionClouds.Any() || resultsfromcad.BlockAttributes.Any() || resultsfromcad.PlotTags.Any();
+                // Validamos
+                if (hasData || warningChecksLog.Any())
+                {
+                    // ---------------------------------
+                    // Preparar datos exportacion
+                    // ---------------------------------
+
+                    Dictionary<string, object> exportData = GetExportData(
+                        keys, selectedOptions, resultsfromcad
+                    );
+
+                    // ---------------------------------
+                    // Validar
+                    // ---------------------------------
+
+                    if (warningChecksLog.Any())
                     {
-                        TotalFilesProcessed = filesSelectedProcessed,
-                        ParametersAnalyzed = filesSelectedProcessed
-                    };
+                        exportData.Add("Warning Selected Checks Log", warningChecksLog);
+                    }
+
+                    // ---------------------------------
+                    // Exportar Report
+                    // ---------------------------------
+
+                    msg = isSpanish
+                        ? "Generando los informes finales en Excel y HTML..."
+                        : "Generating the final Excel and HTML reports...";
+                    // Mensaje
+                    new AutoCloseMessageForm(msg, 1000).ShowDialog();
+
+                    // Excel
+                    cls_00_ExportModCheckToExcel_OpenXml.ExportDataToExcel(exportData);
+
+                    // Html
+                    cls_00_ExportTgnCheckToHtml.ExportToHtml(
+                        exportData, warningChecksLog, projectCode, totalFiles, processedFiles
+                    );
+                }
+                else
+                {
+                    // Mensaje
+                    MessageBox.Show(
+                        "No data found for the selected checks.", "Atenea Model Checker",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information
+                    );
+                }
+
+                // -----------------------------
+                // Exportar JSON Global
+                // -----------------------------
+
+                // try
+                try
+                {
+                    // Preparar diccionario a enviar
+                    Dictionary<string, object> dictDataByFileToJson = GetFinalJsonDictionary(
+                        projectCode, softwareLanguage, dataJsonByModel
+                    );
+                    // Exportamos
+                    cls_00_SaveJson.TrySaveJson(
+                        isSpanish, dictDataByFileToJson, projectCode, info.RootFolderName, info.JsonFileNameDataExtraction
+                    );
                 }
                 // catch
-                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    string inner = ex.InnerException != null
+                        ? $"\n\nInner:\n{ex.InnerException.Message}"
+                        : "";
+                    // Mostramos
+                    MessageBox.Show(
+                        "Error generating JSON\n\n" + ex.Message + inner + "\n\nStack:\n" + ex.StackTrace,
+                        "JSON Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error
+                    );
                 }
 
-                // Por defecto
-                return new ProcessResult();
+                //// Enviar Metricas Serapis
+                //cls_00_SerapisMetrics.InitializeMetricsAsync("6a3541d327f9ca81c8d1fa0d");
+
+                // -------------------------------
+                // Tiempo total
+                // -------------------------------
+
+                totalStopwatch.Stop();
+
+                processDurations["Total"] = totalStopwatch.Elapsed;
+
+                //// -------------------------------
+                //// Resumen
+                //// -------------------------------
+
+                //DateTime endTime = DateTime.Now;
+                //TimeSpan duration = endTime - startTime;
+
+                //// Mensaje
+                //MessageBox.Show(
+                //    uiTexts.MsgCompleted +
+                //    "\nDuration: " + duration.ToString(@"hh\:mm\:ss") +
+                //    "\nStarted at: " + startTime.ToString("HH:mm:ss") +
+                //    "\nEnded at: " + endTime.ToString("HH:mm:ss"),
+                //    uiTexts.Title, MessageBoxButtons.OK, MessageBoxIcon.Information
+                //);
+
+                // return
+                return new ProcessResult
+                {
+                    TotalFilesProcessed = processedFiles,
+                    ParametersAnalyzed = processedFiles
+                };
             }
+            // catch
+            catch (Autodesk.AutoCAD.Runtime.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            // Por defecto
+            return new ProcessResult();
         }
+        
 
     }
 }
