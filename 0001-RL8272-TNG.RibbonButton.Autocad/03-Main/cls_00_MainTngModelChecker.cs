@@ -16,7 +16,6 @@ using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 using TYPSA.SharedLib.ExcelAutocad;
 using TYPSA.SharedLib.Metrics;
 
-
 namespace TYPSA.PS.RibbonButton.Autocad
 {
     public static class TngModelCheckerDefaults
@@ -48,108 +47,6 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
     public class cls_00_MainTngModelChecker
     {
-        private static Dictionary<string, object> GetExportData(
-            ModelCheckerKeys keys,
-            List<string> selectedOptions,
-            ModelCheckerResults resultsfromcad
-        )
-        {
-            Dictionary<string, object> exportData = new Dictionary<string, object>();
-
-            // -----------------------------
-            // Project Units
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.ProjectUnits) && resultsfromcad.ProjectUnits.Any())
-            {
-                exportData.Add(keys.ProjectUnits, resultsfromcad.ProjectUnits);
-            }
-
-            // -----------------------------
-            // Version
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.Version) && resultsfromcad.Version.Any())
-            {
-                exportData.Add(keys.Version, resultsfromcad.Version);
-            }
-
-            // -----------------------------
-            // Xrefs
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.Xrefs) && resultsfromcad.Xrefs.Any())
-            {
-                exportData.Add(keys.Xrefs, resultsfromcad.Xrefs);
-            }
-
-            // -----------------------------
-            // Layer Zero
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.LayerZero) && resultsfromcad.LayerZero.Any())
-            {
-                exportData.Add(keys.LayerZero, resultsfromcad.LayerZero);
-            }
-
-            // -----------------------------
-            // Layers In Use
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.LayersInUse) && resultsfromcad.LayersInUse.Any())
-            {
-                exportData.Add(keys.LayersInUse, resultsfromcad.LayersInUse);
-            }
-
-            // -----------------------------
-            // Paper Text Font
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.PaperTextFont) && resultsfromcad.PaperTextFont.Any())
-            {
-                exportData.Add(keys.PaperTextFont, resultsfromcad.PaperTextFont);
-            }
-
-            // -----------------------------
-            // ByLayer
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.EntByLayer) && resultsfromcad.ByLayer.Any())
-            {
-                exportData.Add(keys.EntByLayer, resultsfromcad.ByLayer);
-            }
-
-            // -----------------------------
-            // Revision Clouds
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.RevCloud) && resultsfromcad.RevisionClouds.Any())
-            {
-                exportData.Add(keys.RevCloud, resultsfromcad.RevisionClouds);
-            }
-
-            // -----------------------------
-            // Block Attributes
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.AttrBlockRef) && resultsfromcad.BlockAttributes.Any())
-            {
-                exportData.Add(keys.AttrBlockRef, resultsfromcad.BlockAttributes);
-            }
-
-            // -----------------------------
-            // Plot Tags
-            // -----------------------------
-
-            if (selectedOptions.Contains(keys.PlotTag) && resultsfromcad.PlotTags.Any())
-            {
-                exportData.Add(keys.PlotTag, resultsfromcad.PlotTags);
-            }
-
-            // return
-            return exportData;
-        }
-
         private static void SkipNullFile(
             bool isSpanish,
             string fileName,
@@ -173,12 +70,16 @@ namespace TYPSA.PS.RibbonButton.Autocad
             progressBarForm.ProgressValue = percentage;
         }
 
-        public ProcessResult MainTgnModelChecker(
+        public ProcessResult MainTngModelChecker(
+            string selectedFolderPath,
             string[] selectedFiles,
             string projectCode,
             List<string> selectedOptions,
-            bool isSpanish,
-            CadSessionInfo info
+            DateTime startTime,
+            CadSessionInfo info,
+            UiTexts uiTexts,
+            bool isSpanish
+            
         )
         {
             // -------------------------------
@@ -330,45 +231,9 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
                                     modelProcessStopwatch = Stopwatch.StartNew();
 
-                                    cls_00_GetDataCadModelChecker.ProcessProjectUnits(
-                                        selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessLayersInUse(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessLayerZero(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessVersion(
-                                        selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessXrefs(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessPaperTextFont(
-                                        selectedOptions, keys, tr, db, fileName, warningChecksLog, resultsfromcad, extractedData,
-                                        TngModelCheckerDefaults.ExpectedPaperTextFont, applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessEntitiesByLayer(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        isSpanish, applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessRevisionClouds(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessBlockAttributes(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        TngModelCheckerDefaults.BlockAttributesName, applyCleanCheckName: false
-                                    );
-                                    cls_00_GetDataCadModelChecker.ProcessPlotTag(
-                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData, 
-                                        TngModelCheckerDefaults.PlotTagReferenceTexts, TngModelCheckerDefaults.PlotTagBlockName, applyCleanCheckName: false
+                                    cls_00_ProcessModelChecks.ProcessModelChecks(
+                                        selectedOptions, keys, tr, db, bt, fileName, warningChecksLog,
+                                        resultsfromcad, extractedData, isSpanish
                                     );
 
                                     cls_00_ProcessMessages.AddProcessDuration(modelDurations, msg, modelProcessStopwatch);
@@ -388,9 +253,6 @@ namespace TYPSA.PS.RibbonButton.Autocad
                                         { keyFileName, fileName },
                                         { keyElementData, extractedData }
                                     };
-
-                                    // Añadimos
-                                    dataJsonByModel.Add(fileDataByDoc);
 
                                     // Añadimos
                                     dataJsonByModel.Add(fileDataByDoc);
@@ -506,7 +368,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     // Preparar datos exportacion
                     // ---------------------------------
 
-                    Dictionary<string, object> exportData = GetExportData(
+                    Dictionary<string, object> exportData = cls_00_GetExportData.GetExportData(
                         keys, selectedOptions, resultsfromcad
                     );
 
@@ -524,8 +386,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     // ---------------------------------
 
                     msg = isSpanish
-                        ? "Generando los informes finales en Excel y HTML..."
-                        : "Generating the final Excel and HTML reports...";
+                        ? "Generando los informes finales en Excel y HTML"
+                        : "Generating the final Excel and HTML reports";
                     // Mensaje
                     new AutoCloseMessageForm(msg, 1000).ShowDialog();
 
@@ -534,7 +396,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
                     // Html
                     cls_00_ExportTgnCheckToHtml.ExportToHtml(
-                        exportData, warningChecksLog, projectCode, totalFiles, processedFiles
+                        selectedFolderPath, exportData, warningChecksLog, projectCode, totalFiles, processedFiles
                     );
                 }
                 else
@@ -554,12 +416,13 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 try
                 {
                     // Preparar diccionario a enviar
-                    Dictionary<string, object> dictDataByFileToJson = GetFinalJsonDictionary(
+                    Dictionary<string, object> dictDataByFileToJson = GetFinalJsonDictionaryTng(
                         projectCode, softwareLanguage, dataJsonByModel
                     );
                     // Exportamos
                     cls_00_SaveJson.TrySaveJson(
-                        isSpanish, dictDataByFileToJson, projectCode, info.RootFolderName, info.JsonFileNameDataExtraction
+                        isSpanish, dictDataByFileToJson, projectCode, info.RootFolderNameTng, 
+                        info.JsonFileNameDataExtractionTng, selectedFolderPath
                     );
                 }
                 // catch
@@ -575,8 +438,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     );
                 }
 
-                //// Enviar Metricas Serapis
-                //cls_00_SerapisMetrics.InitializeMetricsAsync("6a3541d327f9ca81c8d1fa0d");
+                // Enviar Metricas Serapis
+                cls_00_SerapisMetrics.InitializeMetricsAsync("6a3541d327f9ca81c8d1fa0d");
 
                 // -------------------------------
                 // Tiempo total
@@ -586,21 +449,21 @@ namespace TYPSA.PS.RibbonButton.Autocad
 
                 processDurations["Total"] = totalStopwatch.Elapsed;
 
-                //// -------------------------------
-                //// Resumen
-                //// -------------------------------
+                // -------------------------------
+                // Resumen
+                // -------------------------------
 
-                //DateTime endTime = DateTime.Now;
-                //TimeSpan duration = endTime - startTime;
+                DateTime endTime = DateTime.Now;
+                TimeSpan duration = endTime - startTime;
 
-                //// Mensaje
-                //MessageBox.Show(
-                //    uiTexts.MsgCompleted +
-                //    "\nDuration: " + duration.ToString(@"hh\:mm\:ss") +
-                //    "\nStarted at: " + startTime.ToString("HH:mm:ss") +
-                //    "\nEnded at: " + endTime.ToString("HH:mm:ss"),
-                //    uiTexts.Title, MessageBoxButtons.OK, MessageBoxIcon.Information
-                //);
+                // Mensaje
+                MessageBox.Show(
+                    uiTexts.MsgCompleted +
+                    "\nDuration: " + duration.ToString(@"hh\:mm\:ss") +
+                    "\nStarted at: " + startTime.ToString("HH:mm:ss") +
+                    "\nEnded at: " + endTime.ToString("HH:mm:ss"),
+                    uiTexts.Title, MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
 
                 // return
                 return new ProcessResult

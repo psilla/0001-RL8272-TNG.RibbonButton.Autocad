@@ -8,98 +8,119 @@ using TYPSA.SharedLib.UserForms;
 
 namespace TYPSA.PS.RibbonButton.Autocad
 {
+    public class UiTexts
+    {
+        public string Title { get; set; }
+        public string MsgNoOptions { get; set; }
+        public string MsgCompleted { get; set; }
+        public string MsgTitle { get; set; }
+    }
+
     public class cls_00_ButtonTngModelChecker
     {
-        [CommandMethod(RibbonCommands.ButtonTGNModelChecker)]
-        public static void ButtonAteneaModelChecker()
+        private static UiTexts GetUiTexts(bool isSpanish)
         {
-            // ---------------------------------
-            // Obtener datos de usuario
-            // ---------------------------------
+            return new UiTexts
+            {
+                Title = isSpanish
+                    ? "Seleccione los análisis a ejecutar:"
+                    : "Select the analysis to be performed:",
 
-            bool userData = cls_00_GetUserData.GetUserData(
-                out string projectCode,
-                out List<string> selectedFiles,
-                out string selectedFolderPath,
-                out DateTime startTime,
-                customPathLabel: "Please, paste the folder containing the DWG files to analyze"
-            );
-            // Validamos
-            if (!userData) return;
+                MsgNoOptions = isSpanish
+                    ? "No se seleccionó ninguna opción. El proceso ha sido cancelado."
+                    : "No options were selected. The process has been cancelled.",
 
-            // ---------------------------------
-            // Detectar Idioma Autocad
-            // ---------------------------------
+                MsgCompleted = isSpanish
+                    ? $"{nameof(RibbonCommands.ProcessTGNChecker)} finalizado correctamente."
+                    : $"{nameof(RibbonCommands.ProcessTGNChecker)} completed successfully.",
 
-            CadSessionInfo info = new CadSessionInfo();
-            // Detectamos
-            bool isSpanish = info.CivilLanguage?.Equals(
-                "Spanish", StringComparison.OrdinalIgnoreCase
-            ) == true;
+                MsgTitle = isSpanish
+                    ? "Proceso completado"
+                    : "Process Complete"
+            };
+        }
 
-            // Texto UI según idioma
-            string title = isSpanish
-                ? "Seleccione los análisis a ejecutar:"
-                : "Select the analysis to be performed:";
+        [CommandMethod(RibbonCommands.ButtonTGNChecker)]
+        public static void ButtonTngModelChecker()
+        {
+            // try
+            try
+            {
+                // ---------------------------------
+                // Obtener datos de usuario
+                // ---------------------------------
 
-            string msgNoOptions = isSpanish
-                ? "No se seleccionó ninguna opción. El proceso ha sido cancelado."
-                : "No options were selected. The process has been cancelled.";
+                bool userData = cls_00_GetUserData.GetUserData(
+                    out string projectCode,
+                    out List<string> selectedFiles,
+                    out string selectedFolderPath,
+                    out DateTime startTime,
+                    customPathLabel: "Please, paste the folder containing the DWG files to analyze"
+                );
+                // Validamos
+                if (!userData) return;
 
-            string msgCompleted = isSpanish
-                ? "Atenea Model Checker finalizado correctamente."
-                : "Atenea Model Checker completed successfully.";
+                // ---------------------------------
+                // Obtener informacion
+                // ---------------------------------
 
-            string msgTitle = isSpanish
-                ? "Proceso completado"
-                : "Process Complete";
+                CadSessionInfo info = new CadSessionInfo();
 
-            // ---------------------------------
-            // Form Opciones
-            // ---------------------------------
+                // ---------------------------------
+                // Detectar Idioma 
+                // ---------------------------------
 
-            List<string> selectedOptions = cls_00_InstaForm_CheckedListBox.CheckListBoxFormSearchOut(
-                title,
-                ModelCheckerKeys.GetAllOptions(isSpanish),
-                ModelCheckerKeys.GetDefaultSelectedOptions(isSpanish)
-            );
-            // Validamos
-            if (selectedOptions == null || selectedOptions.Count == 0)
+                // Detectamos
+                bool isSpanish = info.CivilLanguage?.Equals(
+                    "Spanish", StringComparison.OrdinalIgnoreCase
+                ) == true;
+
+                // ---------------------------------
+                // Texto UI segun idioma
+                // ---------------------------------
+
+                UiTexts uiTexts = GetUiTexts(isSpanish);
+
+                // ---------------------------------
+                // Form Opciones
+                // ---------------------------------
+
+                List<string> selectedOptions = cls_00_InstaForm_CheckedListBox.CheckListBoxFormSearchOut(
+                    uiTexts.Title, ModelCheckerKeys.GetAllOptions(isSpanish),
+                    ModelCheckerKeys.GetDefaultSelectedOptions(isSpanish)
+                );
+                // Validamos
+                if (selectedOptions == null || selectedOptions.Count == 0)
+                {
+                    // Mensaje
+                    MessageBox.Show(
+                        uiTexts.MsgNoOptions, "Information",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information
+                    );
+                    // Finalizamos
+                    return;
+                }
+
+                // -------------------------------
+                // Ejecutamos
+                // -------------------------------
+
+                cls_00_MainTngModelChecker mainProcess = new cls_00_MainTngModelChecker();
+                // Procesar archivos
+                ProcessResult processResult = mainProcess.MainTngModelChecker(
+                    selectedFolderPath, selectedFiles.ToArray(), projectCode, 
+                    selectedOptions, startTime, info, uiTexts, isSpanish
+                );
+            }
+            // catch
+            catch (System.Exception ex)
             {
                 // Mensaje
                 MessageBox.Show(
-                    msgNoOptions, "Information",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information
+                    "An unexpected error occurred while executing Atenea Model Checker.\n\n" +
+                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
-                // Finalizamos
-                return;
             }
-
-            // -------------------------------
-            // Ejecutamos
-            // -------------------------------
-
-            cls_00_MainTngModelChecker mainProcess = new cls_00_MainTngModelChecker();
-            // Procesar archivos
-            ProcessResult processResult = mainProcess.MainTgnModelChecker(
-                selectedFiles.ToArray(), projectCode, selectedOptions, isSpanish, info
-            );
-
-            // -------------------------------
-            // Summary
-            // -------------------------------
-
-            DateTime endTime = DateTime.Now;
-            TimeSpan duration = endTime - startTime;
-
-            // Mensaje
-            MessageBox.Show(
-                msgCompleted +
-                "\nDuration: " + duration.ToString(@"hh\:mm\:ss") +
-                "\nStarted at: " + startTime.ToString("HH:mm:ss") +
-                "\nEnded at: " + endTime.ToString("HH:mm:ss"),
-                msgTitle, MessageBoxButtons.OK, MessageBoxIcon.Information
-            );
         }
 
 

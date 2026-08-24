@@ -1,13 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
+  "WorkspaceRootPath": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlib\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\00-getentities\\cls_00_getelembyregionbybrep.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\01-ribbon\\app.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:01-ribbon\\app.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,27 +51,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "cls_00_GetElemByRegionByBrep.cs",
-              "DocumentMoniker": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\00-GetEntities\\cls_00_GetElemByRegionByBrep.cs",
-              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\00-GetEntities\\cls_00_GetElemByRegionByBrep.cs",
-              "ToolTip": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\00-GetEntities\\cls_00_GetElemByRegionByBrep.cs",
-              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\00-GetEntities\\cls_00_GetElemByRegionByBrep.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA0AAAAAAAAAA==",
+              "Title": "cls_00_MainTngModelChecker.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
+              "RelativeDocumentMoniker": "03-Main\\cls_00_MainTngModelChecker.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
+              "RelativeToolTip": "03-Main\\cls_00_MainTngModelChecker.cs",
+              "ViewState": "AgIAAIMBAAAAAAAAAAAtwKgBAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:49:10.311Z",
+              "WhenOpened": "2026-08-24T09:15:41.419Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "App.cs",
-              "DocumentMoniker": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\01-Ribbon\\App.cs",
-              "RelativeDocumentMoniker": "01-Ribbon\\App.cs",
-              "ToolTip": "C:\\0001-RL8272-TNG.RibbonButton.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\01-Ribbon\\App.cs",
-              "RelativeToolTip": "01-Ribbon\\App.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:48:59.532Z"
             }
           ]
         },

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows;
@@ -12,7 +11,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
 {
     public static class RibbonCommands
     {
-        public const string ButtonTGNModelChecker = "ButtonTGNModelChecker";
+        public const string ButtonTGNChecker = "ButtonTNGChecker";
+        public const string ProcessTGNChecker = "TNG DWGs Checker";
     }
 
     public class App : IExtensionApplication
@@ -56,7 +56,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     name: "TNG DWG Drawing Checker",
                     text: "TNG DWG Drawing Checker",
                     image: Resources.AteneaModelCheckerCivil,
-                    commandParameter: RibbonCommands.ButtonTGNModelChecker,
+                    commandParameter: RibbonCommands.ButtonTGNChecker,
                     tooltipTitle: "",
                     tooltipContent: ""
                 );
@@ -92,9 +92,9 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     string command = ribbonButton.CommandParameter as string;
                     switch (command)
                     {
-                        case RibbonCommands.ButtonTGNModelChecker:
+                        case RibbonCommands.ButtonTGNChecker:
                             // Instanciamos la clase
-                            cls_00_ButtonTngModelChecker.ButtonAteneaModelChecker();
+                            cls_00_ButtonTngModelChecker.ButtonTngModelChecker();
                             break;
 
                         // Default case for unhandled commands. No action is taken.

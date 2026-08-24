@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -75,6 +75,8 @@
     <Compile Include="01-Ribbon\App.cs" />
     <Compile Include="02-Buttons\cls_00_ExportTgnCheckToHtml.cs" />
     <Compile Include="02-Buttons\cls_00_ButtonTngModelChecker.cs" />
+    <Compile Include="03-Main\cls_00_ProcessModelChecks.cs" />
+    <Compile Include="03-Main\cls_00_GetExportData.cs" />
     <Compile Include="03-Main\cls_00_MainTngModelChecker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
