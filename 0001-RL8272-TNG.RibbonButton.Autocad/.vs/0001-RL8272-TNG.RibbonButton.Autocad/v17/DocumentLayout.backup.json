@@ -3,8 +3,11 @@
   "WorkspaceRootPath": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlib\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\01-main\\cls_00_ateneamodelchecker\\cls_00_getdatacadmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +17,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "cls_00_ProcessModelChecks.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
+              "RelativeDocumentMoniker": "03-Main\\cls_00_ProcessModelChecks.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
+              "RelativeToolTip": "03-Main\\cls_00_ProcessModelChecks.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAgwD8AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-25T19:49:49.38Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
@@ -51,14 +67,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "cls_00_MainTngModelChecker.cs",
-              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
-              "RelativeDocumentMoniker": "03-Main\\cls_00_MainTngModelChecker.cs",
-              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
-              "RelativeToolTip": "03-Main\\cls_00_MainTngModelChecker.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHABAAA4AAAAAAAAAA==",
+              "Title": "cls_00_GetDataCadModelChecker.cs",
+              "DocumentMoniker": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
+              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
+              "ToolTip": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
+              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcDAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-24T09:15:41.419Z",
+              "WhenOpened": "2026-08-25T15:08:11.09Z",
               "EditorCaption": ""
             }
           ]

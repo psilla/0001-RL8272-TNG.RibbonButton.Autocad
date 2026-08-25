@@ -68,9 +68,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
             );
 
             cls_00_GetDataCadModelChecker.ProcessPlotTag(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                TngModelCheckerDefaults.PlotTagReferenceTexts,
-                TngModelCheckerDefaults.PlotTagBlockName,
+                selectedOptions, keys, tr, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
+                TngModelCheckerDefaults.PlotTagReferenceTexts, TngModelCheckerDefaults.PlotTagBlockName,
                 applyCleanCheckName: false
             );
         }
