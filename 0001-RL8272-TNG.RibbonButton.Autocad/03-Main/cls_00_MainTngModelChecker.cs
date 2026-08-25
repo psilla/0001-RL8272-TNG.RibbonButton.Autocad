@@ -368,7 +368,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     // Preparar datos exportacion
                     // ---------------------------------
 
-                    Dictionary<string, object> exportData = cls_00_GetExportData.GetExportData(
+                    Dictionary<string, object> exportData = cls_00_GetExportData.GetAllExportData(
                         keys, selectedOptions, resultsfromcad
                     );
 
