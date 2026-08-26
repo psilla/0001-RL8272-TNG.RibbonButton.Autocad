@@ -55,10 +55,17 @@ namespace TYPSA.PS.RibbonButton.Autocad
                     out List<string> selectedFiles,
                     out string selectedFolderPath,
                     out DateTime startTime,
-                    customPathLabel: "Please, paste the folder containing the DWG files to analyze"
+                    customPathLabel: "Please, paste the folder containing the DWG files to analyze",
+                    requestProjectCode: false
                 );
                 // Validamos
                 if (!userData) return;
+
+                // ---------------------------------
+                // Definir código de proyecto
+                // ---------------------------------
+
+                projectCode = "RL8272";
 
                 // ---------------------------------
                 // Obtener informacion

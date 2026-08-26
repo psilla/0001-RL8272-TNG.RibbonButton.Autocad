@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlib\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\01-main\\cls_00_ateneamodelchecker\\cls_00_getdatacadmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:02-buttons\\cls_00_buttontngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{631B9318-A021-4B24-87F0-3FEC637EAE77}|..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad.csproj|c:\\0000-typsa.sharedlib\\0000-typsa.sharedlibautocad\\typsa.sharedlibautocad\\02-buttons\\cls_00_getuserdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,14 +22,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "cls_00_ProcessModelChecks.cs",
-              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
-              "RelativeDocumentMoniker": "03-Main\\cls_00_ProcessModelChecks.cs",
-              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
-              "RelativeToolTip": "03-Main\\cls_00_ProcessModelChecks.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAgwD8AAABAAAAAAAAAAA==",
+              "Title": "cls_00_GetUserData.cs",
+              "DocumentMoniker": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\02-Buttons\\cls_00_GetUserData.cs",
+              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\02-Buttons\\cls_00_GetUserData.cs",
+              "ToolTip": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\02-Buttons\\cls_00_GetUserData.cs",
+              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\02-Buttons\\cls_00_GetUserData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-25T19:49:49.38Z",
+              "WhenOpened": "2026-08-26T08:56:43.891Z",
               "EditorCaption": ""
             },
             {
@@ -67,14 +67,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "cls_00_GetDataCadModelChecker.cs",
-              "DocumentMoniker": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
-              "RelativeDocumentMoniker": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
-              "ToolTip": "C:\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
-              "RelativeToolTip": "..\\..\\0000-TYPSA.SharedLib\\0000-TYPSA.SharedLibAutocad\\TYPSA.SharedLibAutocad\\01-Main\\cls_00_AteneaModelChecker\\cls_00_GetDataCadModelChecker.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcDAABFAAAAAAAAAA==",
+              "Title": "cls_00_ButtonTngModelChecker.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "RelativeDocumentMoniker": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "RelativeToolTip": "02-Buttons\\cls_00_ButtonTngModelChecker.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAUwEMAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-25T15:08:11.09Z",
+              "WhenOpened": "2026-08-26T08:56:37.825Z",
               "EditorCaption": ""
             }
           ]
