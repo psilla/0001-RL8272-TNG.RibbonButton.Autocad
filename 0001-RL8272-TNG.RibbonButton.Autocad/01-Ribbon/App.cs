@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 using Autodesk.AutoCAD.Runtime;
 using _0001_RL8272_TNG.RibbonButton.Autocad.Properties;
 
-namespace TYPSA.PS.RibbonButton.Autocad
+namespace TNG.RibbonButton.Autocad
 {
     public static class RibbonCommands
     {

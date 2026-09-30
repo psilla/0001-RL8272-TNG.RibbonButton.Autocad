@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Autodesk.AutoCAD.DatabaseServices;
-using TYPSA.SharedLib.Autocad.Main;
+using TYPSA.SharedLib.Autocad;
+using static TYPSA.SharedLib.Autocad.cls_00_ProcessCommonModelChecks;
 
-namespace TYPSA.PS.RibbonButton.Autocad
+namespace TNG.RibbonButton.Autocad
 {
     internal class cls_00_ProcessModelChecks
     {
@@ -19,59 +20,24 @@ namespace TYPSA.PS.RibbonButton.Autocad
             bool isSpanish
         )
         {
-            cls_00_GetDataCadModelChecker.ProcessProjectUnits(
-                selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
-            );
+            // -----------------------------
+            // Procesar chequeos comunes
+            // -----------------------------
 
-            cls_00_GetDataCadModelChecker.ProcessLayersInUse(
+            ProcessCommonCadChecks(
                 selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
+                isSpanish, TngModelCheckerDefaults.ExpectedPaperTextFont, applyCleanCheckName: false
             );
 
-            cls_00_GetDataCadModelChecker.ProcessLayerZero(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
-            );
+            // -----------------------------
+            // Procesar checks CAD
+            // -----------------------------
 
-            cls_00_GetDataCadModelChecker.ProcessVersion(
-                selectedOptions, keys, db, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessXrefs(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessPaperTextFont(
-                selectedOptions, keys, tr, db, fileName, warningChecksLog, resultsfromcad, extractedData,
-                TngModelCheckerDefaults.ExpectedPaperTextFont,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessEntitiesByLayer(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                isSpanish,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessRevisionClouds(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessBlockAttributes(
-                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                TngModelCheckerDefaults.BlockAttributesName,
-                applyCleanCheckName: false
-            );
-
-            cls_00_GetDataCadModelChecker.ProcessPlotTag(
-                selectedOptions, keys, tr, bt, fileName, warningChecksLog, resultsfromcad, extractedData,
-                TngModelCheckerDefaults.PlotTagReferenceTexts, TngModelCheckerDefaults.PlotTagBlockName,
-                applyCleanCheckName: false
+            ProcessTngCadChecks(
+                selectedOptions, keys, tr, db, bt, fileName, warningChecksLog, resultsfromcad, extractedData
             );
         }
+
+
     }
 }

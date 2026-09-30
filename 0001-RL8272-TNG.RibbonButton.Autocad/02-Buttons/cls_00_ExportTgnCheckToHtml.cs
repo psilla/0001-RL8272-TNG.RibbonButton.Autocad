@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using _0001_RL8272_TNG.RibbonButton.Autocad.Properties;
-using TYPSA.SharedLib.Autocad.Main;
+using TYPSA.SharedLib.Autocad;
 
-namespace TYPSA.PS.RibbonButton.Autocad
+namespace TNG.RibbonButton.Autocad
 {
     internal class cls_00_ExportTgnCheckToHtml
     {

@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_maintngmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_processfilesmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_processfilesmodelchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|c:\\0001-rl8272-tng.autocad\\0001-rl8272-tng.ribbonbutton.autocad\\03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCB902CF-C442-4BB0-BA59-5E7B6AA1E2D5}|0001-RL8272-TNG.RibbonButton.Autocad.csproj|solutionrelative:03-main\\cls_00_processmodelchecks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,15 +58,41 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "cls_00_ProcessFilesModelChecker.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessFilesModelChecker.cs",
+              "RelativeDocumentMoniker": "03-Main\\cls_00_ProcessFilesModelChecker.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessFilesModelChecker.cs",
+              "RelativeToolTip": "03-Main\\cls_00_ProcessFilesModelChecker.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAEwKUAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-17T14:40:50.957Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "cls_00_ProcessModelChecks.cs",
+              "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
+              "RelativeDocumentMoniker": "03-Main\\cls_00_ProcessModelChecks.cs",
+              "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_ProcessModelChecks.cs",
+              "RelativeToolTip": "03-Main\\cls_00_ProcessModelChecks.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-17T14:35:08.041Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "cls_00_MainTngModelChecker.cs",
               "DocumentMoniker": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
               "RelativeDocumentMoniker": "03-Main\\cls_00_MainTngModelChecker.cs",
               "ToolTip": "C:\\0001-RL8272-TNG.Autocad\\0001-RL8272-TNG.RibbonButton.Autocad\\03-Main\\cls_00_MainTngModelChecker.cs",
               "RelativeToolTip": "03-Main\\cls_00_MainTngModelChecker.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHwBAABwAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEYAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-26T17:21:08.014Z",
+              "WhenOpened": "2026-09-16T11:03:20.462Z",
               "EditorCaption": ""
             }
           ]

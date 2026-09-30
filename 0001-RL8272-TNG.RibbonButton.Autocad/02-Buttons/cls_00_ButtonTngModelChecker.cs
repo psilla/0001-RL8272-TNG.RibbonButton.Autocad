@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Autodesk.AutoCAD.Runtime;
-using TYPSA.SharedLib.Autocad.Buttons;
-using TYPSA.SharedLib.Autocad.Main;
+using TYPSA.SharedLib.Autocad;
 using TYPSA.SharedLib.UserForms;
 
-namespace TYPSA.PS.RibbonButton.Autocad
+namespace TNG.RibbonButton.Autocad
 {
     public class UiTexts
     {
@@ -51,9 +50,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 // ---------------------------------
 
                 bool userData = cls_00_GetUserData.GetUserData(
-                    out string projectCode,
-                    out List<string> selectedFiles,
-                    out string selectedFolderPath,
+                    out string projectCode, out List<string> selectedFiles, out string selectedFolderPath,
                     out DateTime startTime,
                     customPathLabel: "Please, paste the folder containing the DWG files to analyze",
                     requestProjectCode: false
@@ -71,14 +68,14 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 // Obtener informacion
                 // ---------------------------------
 
-                CadSessionInfo info = new CadSessionInfo();
+                CadSessionInfo infoCad = new CadSessionInfo();
 
                 // ---------------------------------
                 // Detectar Idioma 
                 // ---------------------------------
 
                 // Detectamos
-                bool isSpanish = info.CivilLanguage?.Equals(
+                bool isSpanish = infoCad.CivilLanguage?.Equals(
                     "Spanish", StringComparison.OrdinalIgnoreCase
                 ) == true;
 
@@ -93,8 +90,8 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 // ---------------------------------
 
                 List<string> selectedOptions = cls_00_InstaForm_CheckedListBox.CheckListBoxFormSearchOut(
-                    uiTexts.Title, ModelCheckerKeys.GetAllOptions(isSpanish),
-                    ModelCheckerKeys.GetDefaultSelectedOptions(isSpanish)
+                    uiTexts.Title, ModelCheckerKeys.GetAllOptionsTng(isSpanish),
+                    ModelCheckerKeys.GetDefaultSelectedOptionsTng(isSpanish)
                 );
                 // Validamos
                 if (selectedOptions == null || selectedOptions.Count == 0)
@@ -116,7 +113,7 @@ namespace TYPSA.PS.RibbonButton.Autocad
                 // Procesar archivos
                 ProcessResult processResult = mainProcess.MainTngModelChecker(
                     selectedFolderPath, selectedFiles.ToArray(), projectCode, 
-                    selectedOptions, startTime, info, uiTexts, isSpanish
+                    selectedOptions, startTime, infoCad, uiTexts, isSpanish
                 );
             }
             // catch

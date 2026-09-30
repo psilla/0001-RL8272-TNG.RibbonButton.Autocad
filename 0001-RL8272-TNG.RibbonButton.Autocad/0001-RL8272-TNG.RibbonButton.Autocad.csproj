@@ -75,6 +75,8 @@
     <Compile Include="01-Ribbon\App.cs" />
     <Compile Include="02-Buttons\cls_00_ExportTgnCheckToHtml.cs" />
     <Compile Include="02-Buttons\cls_00_ButtonTngModelChecker.cs" />
+    <Compile Include="03-Main\cls_00_GetReportData.cs" />
+    <Compile Include="03-Main\cls_00_ProcessFilesModelChecker.cs" />
     <Compile Include="03-Main\cls_00_ProcessModelChecks.cs" />
     <Compile Include="03-Main\cls_00_GetExportData.cs" />
     <Compile Include="03-Main\cls_00_MainTngModelChecker.cs" />

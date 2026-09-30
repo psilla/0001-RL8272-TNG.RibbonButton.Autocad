@@ -17,6 +17,15 @@ namespace TYPSA.SharedLib.UserForms
         {
             InitializeComponent();
 
+            // -----------------------------
+            // Cargar icono
+            // -----------------------------
+
+            this.Icon = cls_00_GetEmbeddedIcon.GetEmbeddedIcon(
+                "typsa-dest.png",
+                typeof(ExcelPathEntry).Assembly
+            );
+
             // Cargar archivos en la lista
             foreach (var file in fileNames)
             {
